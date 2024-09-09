@@ -4,11 +4,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="00000000000001-seq" author="codecake">
+    <changeSet id="00000000000001-seq" author="omar">
         <createSequence sequenceName="user_generator" startValue="1" incrementBy="1"/>
     </changeSet>
 
-    <changeSet id="00000000000001-user" author="codecake">
+    <changeSet id="00000000000001-user" author="omar">
         <createTable tableName="airbnb_user">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
@@ -27,7 +27,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="00000000000001-authority" author="codecake">
+    <changeSet id="00000000000001-authority" author="omar">
         <createTable tableName="authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>

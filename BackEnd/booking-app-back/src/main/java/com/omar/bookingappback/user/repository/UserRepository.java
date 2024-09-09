@@ -1,6 +1,7 @@
 package com.omar.bookingappback.user.repository;
 
-import com.omar.bookingappback.user.User;
+
+import com.omar.bookingappback.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

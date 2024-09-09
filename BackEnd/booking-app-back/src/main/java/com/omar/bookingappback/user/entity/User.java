@@ -1,7 +1,6 @@
-package com.omar.bookingappback.user;
+package com.omar.bookingappback.user.entity;
 
 import com.omar.bookingappback.shared.AbstractAuditingEntity;
-import com.omar.bookingappback.user.entity.Authority;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -46,4 +45,10 @@ public class User extends AbstractAuditingEntity<Long> {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     private Set<Authority> authorities = new HashSet<>();
+
+    // Explicitly implement the abstract getId() method from AbstractAuditingEntity
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 }
