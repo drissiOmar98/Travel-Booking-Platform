@@ -39,12 +39,12 @@ spring:
 server:
   port: 8080
 
-#okta:
-#  oauth2:
-#    issuer: https://airbnb-clone.us.auth0.com/
-#    client-id: ${AUTH0_CLIENT_ID}
-#    client-secret: ${AUTH0_CLIENT_SECRET}
-#
-#application:
-#  auth0:
-#    role-landlord-id: rol_v1CpFU8josLg8YjC
+okta:
+  oauth2:
+    issuer: https://dev-8hd7gc37hxk7omou.us.auth0.com/
+    client-id: ${AUTH0_CLIENT_ID}
+    client-secret: ${AUTH0_CLIENT_SECRET}
+
+application:
+  auth0:
+    role-landlord-id: rol_pw0crlXg3Mr2OUpF
