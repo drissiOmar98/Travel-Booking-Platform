@@ -2,19 +2,13 @@ package com.omar.bookingappback.listing;
 
 import com.omar.bookingappback.shared.AbstractAuditingEntity;
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "listing_picture")
-@Builder
 public class ListingPicture extends AbstractAuditingEntity<Long> {
 
 
@@ -66,5 +60,39 @@ public class ListingPicture extends AbstractAuditingEntity<Long> {
         return this.id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public Listing getListing() {
+        return listing;
+    }
+
+    public void setListing(Listing listing) {
+        this.listing = listing;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileContentType() {
+        return fileContentType;
+    }
+
+    public void setFileContentType(String fileContentType) {
+        this.fileContentType = fileContentType;
+    }
+
+    public boolean isCover() {
+        return isCover;
+    }
+
+    public void setCover(boolean cover) {
+        isCover = cover;
+    }
 }

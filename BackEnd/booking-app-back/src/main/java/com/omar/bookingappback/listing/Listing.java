@@ -11,12 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "listing")
-@Builder
 public class Listing extends AbstractAuditingEntity<Long> {
 
     @Id
@@ -60,6 +55,108 @@ public class Listing extends AbstractAuditingEntity<Long> {
     @OneToMany(mappedBy = "listing", cascade = CascadeType.REMOVE)
     private Set<ListingPicture> pictures = new HashSet<>();
 
+
+
+    public UUID getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(UUID publicId) {
+        this.publicId = publicId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getGuests() {
+        return guests;
+    }
+
+    public void setGuests(int guests) {
+        this.guests = guests;
+    }
+
+    public int getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(int bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public int getBeds() {
+        return beds;
+    }
+
+    public void setBeds(int beds) {
+        this.beds = beds;
+    }
+
+    public int getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(int bathrooms) {
+        this.bathrooms = bathrooms;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public BookingCategory getBookingCategory() {
+        return bookingCategory;
+    }
+
+    public void setBookingCategory(BookingCategory bookingCategory) {
+        this.bookingCategory = bookingCategory;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public UUID getLandlordPublicId() {
+        return landlordPublicId;
+    }
+
+    public void setLandlordPublicId(UUID landlordPublicId) {
+        this.landlordPublicId = landlordPublicId;
+    }
+
+    public Set<ListingPicture> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(Set<ListingPicture> pictures) {
+        this.pictures = pictures;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,4 +191,7 @@ public class Listing extends AbstractAuditingEntity<Long> {
     public Long getId() {
         return this.id;
     }
+
+
+
 }
