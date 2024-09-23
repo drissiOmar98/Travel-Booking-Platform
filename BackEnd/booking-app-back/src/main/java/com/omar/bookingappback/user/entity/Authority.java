@@ -15,11 +15,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "authority")
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Authority implements Serializable {
 
     @NotNull
@@ -27,6 +22,14 @@ public class Authority implements Serializable {
     @Id
     @Column(length = 50)
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public boolean equals(Object o) {

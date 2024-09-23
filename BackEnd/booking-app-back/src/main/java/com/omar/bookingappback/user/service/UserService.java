@@ -17,13 +17,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+
 public class UserService {
 
 
     private static final String UPDATED_AT_KEY = "updated_at";
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
+
 
 
     /**

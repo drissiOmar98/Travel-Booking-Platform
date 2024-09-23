@@ -2,6 +2,7 @@ package com.omar.bookingappback.user.entity;
 
 import com.omar.bookingappback.shared.AbstractAuditingEntity;
 import jakarta.persistence.*;
+
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -10,12 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "airbnb_user")
-@Builder
 public class User extends AbstractAuditingEntity<Long> {
 
     @Id
@@ -29,6 +25,58 @@ public class User extends AbstractAuditingEntity<Long> {
 
     @Column(name = "first_name")
     private String firstName;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public UUID getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(UUID publicId) {
+        this.publicId = publicId;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
 
     @Column(name = "email")
     private String email;

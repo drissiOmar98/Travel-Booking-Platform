@@ -8,16 +8,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 
 public class SecurityUtils {
 
     public static final String ROLE_TENANT = "ROLE_TENANT";
     public static final String ROLE_LANDLORD = "ROLE_LANDLORD";
 
-    public static final String CLAIMS_NAMESPACE = "https://dev-8hd7gc37hxk7omou.us.auth0.com/roles";
+    public static final String CLAIMS_NAMESPACE = "https://www.omardrissi.eu/roles";
 
     /**
      * Maps OAuth2 attributes to a User entity.
