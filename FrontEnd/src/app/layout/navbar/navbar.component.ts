@@ -11,6 +11,7 @@ import {AuthService} from "../../core/auth/auth.service";
 import {MenuItem} from "primeng/api";
 import {User} from "../../core/model/user.model";
 import dayjs from "dayjs";
+import {PropertiesCreateComponent} from "../../landlord/properties-create/properties-create.component";
 
 @Component({
   selector: 'app-navbar',
@@ -126,7 +127,15 @@ export class NavbarComponent implements OnInit {
 
   }
 
-  openNewListing() {
-
+  openNewListing(): void {
+    this.ref = this.dialogService.open(PropertiesCreateComponent,
+      {
+        width: "60%",
+        header: "Airbnb your home",
+        closable: true,
+        focusOnShow: true,
+        modal: true,
+        showHeader: true
+      })
   }
 }

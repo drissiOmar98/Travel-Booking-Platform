@@ -7,7 +7,7 @@ import {environment} from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
-export class LandlordlistingService {
+export class LandlordListingService {
 
 
   http = inject(HttpClient);
