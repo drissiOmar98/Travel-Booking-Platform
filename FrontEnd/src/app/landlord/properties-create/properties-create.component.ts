@@ -10,11 +10,27 @@ import {NewListingPicture} from "../model/picture.model";
 import {State} from "../../core/model/state.model";
 import {CategoryName} from "../../layout/navbar/category/category.model";
 import {PriceVO} from "../model/listing-vo.model";
+import {CategoryStepComponent} from "./step/category-step/category-step.component";
+import {LocationStepComponent} from "./step/location-step/location-step.component";
+import {InfoStepComponent} from "./step/info-step/info-step.component";
+import {PictureStepComponent} from "./step/picture-step/picture-step.component";
+import {DescriptionStepComponent} from "./step/description-step/description-step.component";
+import {PriceStepComponent} from "./step/price-step/price-step.component";
+import {FooterStepComponent} from "../../shared/footer-step/footer-step.component";
 
 @Component({
   selector: 'app-properties-create',
   standalone: true,
-  imports: [],
+  imports: [
+    CategoryStepComponent,
+    LocationStepComponent,
+    InfoStepComponent,
+    PictureStepComponent,
+    DescriptionStepComponent,
+    PriceStepComponent,
+    FooterStepComponent,
+
+  ],
   templateUrl: './properties-create.component.html',
   styleUrl: './properties-create.component.scss'
 })

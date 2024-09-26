@@ -1,0 +1,25 @@
+<div class="my-4 flex justify-content-center align-items-center">
+  <p-autoComplete
+    [styleClass]="'autocomplete-airbnb'"
+    [panelStyleClass]="'country-panel'"
+    [ngModel]="currentLocation"
+    (onSelect)="onLocationChange($event)"
+    [suggestions]="filteredCountries"
+    (completeMethod)="search($event)"
+    [dropdown]="true"
+    [optionLabel]="'name.common'"
+    [placeholder]="placeholder()">
+    <!-- Use custom template to display the flag and country name -->
+    <ng-template let-country pTemplate="item">
+      <div class="country-item">
+        <img [src]="'https://flagcdn.com/16x12/' + country.cca2.toLowerCase() + '.png'" class="country-flag"/>
+        <span>{{ country.name.common }}</span>
+      </div>
+    </ng-template>
+  </p-autoComplete>
+</div>
+<div leaflet
+     [leafletOptions]="options"
+     [leafletLayersControl]="layersControl"
+     (leafletMapReady)="onMapReady($event)"
+     class="map-location z-0"></div>

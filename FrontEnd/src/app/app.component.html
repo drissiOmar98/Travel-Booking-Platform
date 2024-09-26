@@ -1,5 +1,8 @@
-
 <app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<div class="grid grid-nogutter mb-5" [class.mx-8]="isListingView">
+  <div class="col mt-5">
+    <router-outlet></router-outlet>
+  </div>
+</div>
 <app-footer></app-footer>
 
