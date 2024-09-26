@@ -21,6 +21,11 @@
                        (stepValidityChange)="onValidityChange($event)"></app-info-step>
       </div>
     }
+    @case (PHOTOS) {
+      <app-picture-step [pictures]="newListing.pictures"
+                        (picturesChange)="onPictureChange($event)"
+                        (stepValidityChange)="onValidityChange($event)"></app-picture-step>
+    }
 
   }
 </div>
