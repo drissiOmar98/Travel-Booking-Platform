@@ -26,6 +26,16 @@
                         (picturesChange)="onPictureChange($event)"
                         (stepValidityChange)="onValidityChange($event)"></app-picture-step>
     }
+    @case (DESCRIPTION) {
+      <app-description-step [description]="newListing.description"
+                            (descriptionChange)="onDescriptionChange($event)"
+                            (stepValidityChange)="onValidityChange($event)"></app-description-step>
+    }
+    @case (PRICE) {
+      <app-price-step [price]="newListing.price"
+                      (priceChange)="onPriceChange($event)"
+                      (stepValidityChange)="onValidityChange($event)"></app-price-step>
+    }
 
   }
 </div>
