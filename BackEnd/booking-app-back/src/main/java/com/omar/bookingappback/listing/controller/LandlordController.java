@@ -1,10 +1,15 @@
 package com.omar.bookingappback.listing.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omar.bookingappback.config.SecurityUtils;
 import com.omar.bookingappback.listing.dto.CreatedListingDTO;
+import com.omar.bookingappback.listing.dto.DisplayCardListingDTO;
 import com.omar.bookingappback.listing.dto.SaveListingDTO;
 import com.omar.bookingappback.listing.dto.sub.PictureDTO;
 import com.omar.bookingappback.listing.service.LandlordService;
+import com.omar.bookingappback.shared.state.State;
+import com.omar.bookingappback.shared.state.StatusNotification;
+import com.omar.bookingappback.user.dto.ReadUserDTO;
 import com.omar.bookingappback.user.exception.UserException;
 import com.omar.bookingappback.user.service.UserService;
 import jakarta.validation.ConstraintViolation;
@@ -13,16 +18,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -105,5 +109,48 @@ public class LandlordController {
                 throw new UserException(String.format("Cannot parse multipart file: %s", multipartFile.getOriginalFilename()));
             }
         };
+    }
+
+    /**
+     * GET /get-all - Retrieves all properties for the currently authenticated landlord.
+     *
+     * This endpoint fetches all listings for the landlord authenticated in the security context.
+     * It returns a list of `DisplayCardListingDTO` representing the landlord's properties.
+     *
+     * @return A `ResponseEntity` containing a list of `DisplayCardListingDTO` representing the landlord's properties.
+     */
+    @GetMapping(value = "/get-all")
+    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+    public ResponseEntity<List<DisplayCardListingDTO>> getAll() {
+        ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
+        List<DisplayCardListingDTO> allProperties = landlordService.getAllProperties(connectedUser);
+        return ResponseEntity.ok(allProperties);
+    }
+
+
+    /**
+     * DELETE /delete - Deletes a listing belonging to the currently authenticated landlord.
+     *
+     * This endpoint deletes a property listing identified by its public ID.
+     * The deletion is authorized for landlords only, and the system ensures the landlord
+     * can only delete their own listings.
+     *
+     * @param publicId The UUID of the listing to be deleted.
+     * @return A `ResponseEntity` with:
+     * - HTTP 200 (OK) with the deleted listing's UUID if the deletion is successful.
+     * - HTTP 401 (UNAUTHORIZED) if the landlord is not authorized to delete the listing.
+     * - HTTP 500 (INTERNAL_SERVER_ERROR) if something goes wrong during the deletion process.
+     */
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+    public ResponseEntity<UUID> delete(@RequestParam UUID publicId) {
+        ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
+        State<UUID, String> deleteState = landlordService.delete(publicId, connectedUser);
+        if (deleteState.getStatus().equals(StatusNotification.OK)) {
+            return ResponseEntity.ok(deleteState.getValue());
+        } else if (deleteState.getStatus().equals(StatusNotification.UNAUTHORIZED)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
