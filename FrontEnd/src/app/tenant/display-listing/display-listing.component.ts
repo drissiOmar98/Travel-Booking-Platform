@@ -10,6 +10,7 @@ import {Category} from "../../layout/navbar/category/category.model";
 import {DisplayPicture, Listing} from "../../landlord/model/listing.model";
 import {map} from "rxjs";
 import {NgClass} from "@angular/common";
+import {BookDateComponent} from "../book-date/book-date.component";
 
 @Component({
   selector: 'app-display-listing',
@@ -17,7 +18,8 @@ import {NgClass} from "@angular/common";
   imports: [
     AvatarComponent,
     FaIconComponent,
-    NgClass
+    NgClass,
+    BookDateComponent
   ],
   templateUrl: './display-listing.component.html',
   styleUrl: './display-listing.component.scss'
