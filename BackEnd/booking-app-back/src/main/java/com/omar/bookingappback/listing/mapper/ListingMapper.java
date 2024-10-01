@@ -1,10 +1,7 @@
 package com.omar.bookingappback.listing.mapper;
 
 import com.omar.bookingappback.listing.Listing;
-import com.omar.bookingappback.listing.dto.CreatedListingDTO;
-import com.omar.bookingappback.listing.dto.DisplayCardListingDTO;
-import com.omar.bookingappback.listing.dto.DisplayListingDTO;
-import com.omar.bookingappback.listing.dto.SaveListingDTO;
+import com.omar.bookingappback.listing.dto.*;
 import com.omar.bookingappback.listing.dto.vo.PriceVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -113,6 +110,11 @@ public interface ListingMapper {
     @Mapping(target = "category", source = "bookingCategory")
     @Mapping(target = "price.value", source = "price")
     DisplayListingDTO listingToDisplayListingDTO(Listing listing);
+
+
+
+    @Mapping(target = "listingPublicId", source = "publicId")
+    ListingCreateBookingDTO mapListingToListingCreateBookingDTO(Listing listing);
 
 
 

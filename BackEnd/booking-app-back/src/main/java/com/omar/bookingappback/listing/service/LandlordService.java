@@ -3,6 +3,7 @@ package com.omar.bookingappback.listing.service;
 import com.omar.bookingappback.listing.Listing;
 import com.omar.bookingappback.listing.dto.CreatedListingDTO;
 import com.omar.bookingappback.listing.dto.DisplayCardListingDTO;
+import com.omar.bookingappback.listing.dto.ListingCreateBookingDTO;
 import com.omar.bookingappback.listing.dto.SaveListingDTO;
 import com.omar.bookingappback.listing.mapper.ListingMapper;
 import com.omar.bookingappback.listing.repository.ListingRepository;
@@ -139,6 +140,22 @@ public class LandlordService {
     public Optional<DisplayCardListingDTO> getByPublicIdAndLandlordPublicId(UUID listingPublicId, UUID landlordPublicId) {
         return listingRepository.findOneByPublicIdAndLandlordPublicId(listingPublicId, landlordPublicId)
                 .map(listingMapper::listingToDisplayCardListingDTO);
+    }
+
+
+    /**
+     * Retrieves a ListingCreateBookingDTO by its public ID.
+     *
+     * This method fetches a listing from the repository using the provided public ID.
+     * If the listing exists, it maps the Listing entity to a ListingCreateBookingDTO
+     * using the listingMapper.
+     *
+     * @param publicId the public ID of the listing to retrieve
+     * @return an Optional containing the mapped ListingCreateBookingDTO if found,
+     *         or an empty Optional if no listing exists with the provided public ID
+     */
+    public Optional<ListingCreateBookingDTO> getByListingPublicId(UUID publicId) {
+        return listingRepository.findByPublicId(publicId).map(listingMapper::mapListingToListingCreateBookingDTO);
     }
 
 

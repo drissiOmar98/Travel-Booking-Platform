@@ -2,19 +2,13 @@ package com.omar.bookingappback.booking;
 
 import com.omar.bookingappback.shared.AbstractAuditingEntity;
 import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "booking")
-@Builder
 public class Booking extends AbstractAuditingEntity<Long> {
 
     @Id
@@ -51,5 +45,63 @@ public class Booking extends AbstractAuditingEntity<Long> {
         return this.id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public UUID getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(UUID publicId) {
+        this.publicId = publicId;
+    }
+
+    public OffsetDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(OffsetDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public OffsetDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(OffsetDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public int getNumberOfTravelers() {
+        return numberOfTravelers;
+    }
+
+    public void setNumberOfTravelers(int numberOfTravelers) {
+        this.numberOfTravelers = numberOfTravelers;
+    }
+
+    public UUID getFkTenant() {
+        return fkTenant;
+    }
+
+    public void setFkTenant(UUID fkTenant) {
+        this.fkTenant = fkTenant;
+    }
+
+    public UUID getFkListing() {
+        return fkListing;
+    }
+
+    public void setFkListing(UUID fkListing) {
+        this.fkListing = fkListing;
+    }
 }
