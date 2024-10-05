@@ -1,7 +1,7 @@
 import {computed, inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {State} from "../../core/model/state.model";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {BookedDatesDTOFromClient, BookedDatesDTOFromServer, CreateBooking} from "../model/booking.model";
+import {BookedDatesDTOFromClient, BookedDatesDTOFromServer, BookedListing, CreateBooking} from "../model/booking.model";
 import {environment} from "../../../environments/environment";
 import {map} from "rxjs";
 import dayjs from "dayjs";
@@ -38,6 +38,21 @@ export class BookingService {
 
   // Computed signal to expose the availability check state publicly
   checkAvailabilitySig = computed(() => this.checkAvailability$());
+
+
+
+
+  private getBookedListing$: WritableSignal<State<Array<BookedListing>>>
+    = signal(State.Builder<Array<BookedListing>>().forInit());
+  getBookedListingSig = computed(() => this.getBookedListing$());
+
+  private cancel$: WritableSignal<State<string>>
+    = signal(State.Builder<string>().forInit());
+  cancelSig = computed(() => this.cancel$());
+
+  private getBookedListingForLandlord$: WritableSignal<State<Array<BookedListing>>>
+    = signal(State.Builder<Array<BookedListing>>().forInit());
+  getBookedListingForLandlordSig = computed(() => this.getBookedListingForLandlord$());
 
 
   /**
@@ -109,6 +124,42 @@ export class BookingService {
   resetCreateBooking() {
     this.createBooking$.set(State.Builder<boolean>().forInit());
   }
+
+
+  getBookedListing(): void {
+    this.http.get<Array<BookedListing>>(`${environment.API_URL}/booking/get-booked-listing`)
+      .subscribe({
+        next: bookedListings =>
+          this.getBookedListing$.set(State.Builder<Array<BookedListing>>().forSuccess(bookedListings)),
+        error: err => this.getBookedListing$.set(State.Builder<Array<BookedListing>>().forError(err)),
+      });
+  }
+
+  cancel(bookingPublicId: string, listingPublicId: string, byLandlord: boolean): void {
+    const params = new HttpParams()
+      .set("bookingPublicId", bookingPublicId)
+      .set("listingPublicId", listingPublicId)
+      .set("byLandlord", byLandlord);
+    this.http.delete<string>(`${environment.API_URL}/booking/cancel`, {params})
+      .subscribe({
+        next: canceledPublicId => this.cancel$.set(State.Builder<string>().forSuccess(canceledPublicId)),
+        error: err => this.cancel$.set(State.Builder<string>().forError(err)),
+      });
+  }
+
+  resetCancel(): void {
+    this.cancel$.set(State.Builder<string>().forInit());
+  }
+
+  getBookedListingForLandlord(): void {
+    this.http.get<Array<BookedListing>>(`${environment.API_URL}/booking/get-booked-listing-for-landlord`)
+      .subscribe({
+        next: bookedListings =>
+          this.getBookedListingForLandlord$.set(State.Builder<Array<BookedListing>>().forSuccess(bookedListings)),
+        error: err => this.getBookedListingForLandlord$.set(State.Builder<Array<BookedListing>>().forError(err)),
+      });
+  }
+
 
 
 
