@@ -61,6 +61,7 @@
 ### Development Principles
 - **🏗️ Domain-Driven Design**: Follows best practices for code organization and maintainability, ensuring scalable and adaptable architecture.
 
+## Tech Stack
 ### **Backend**:
 - **Spring Boot 3**: 🥇 Framework for building RESTful APIs and microservices, simplifying the development process with convention over configuration.
 - **Java**: ☕ Primary programming language used for backend development, known for its portability and performance.
