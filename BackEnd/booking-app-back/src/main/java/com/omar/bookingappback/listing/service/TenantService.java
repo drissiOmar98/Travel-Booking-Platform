@@ -1,10 +1,12 @@
 package com.omar.bookingappback.listing.service;
 
 
+import com.omar.bookingappback.booking.service.BookingService;
 import com.omar.bookingappback.listing.BookingCategory;
 import com.omar.bookingappback.listing.Listing;
 import com.omar.bookingappback.listing.dto.DisplayCardListingDTO;
 import com.omar.bookingappback.listing.dto.DisplayListingDTO;
+import com.omar.bookingappback.listing.dto.SearchDTO;
 import com.omar.bookingappback.listing.dto.sub.LandlordListingDTO;
 import com.omar.bookingappback.listing.mapper.ListingMapper;
 import com.omar.bookingappback.listing.repository.ListingRepository;
@@ -30,10 +32,14 @@ public class TenantService {
 
     private final UserService userService;
 
-    public TenantService(ListingRepository listingRepository, ListingMapper listingMapper, UserService userService) {
+    private final BookingService bookingService;
+
+    public TenantService(ListingRepository listingRepository, ListingMapper listingMapper, UserService userService, BookingService bookingService) {
+
         this.listingRepository = listingRepository;
         this.listingMapper = listingMapper;
         this.userService = userService;
+        this.bookingService = bookingService;
 
     }
 
@@ -86,6 +92,48 @@ public class TenantService {
         return State.<DisplayListingDTO, String>builder().forSuccess(displayListingDTO);
     }
 
+
+    /**
+     * Searches for listings based on specific criteria and filters out those that are already booked
+     * within the specified date range.
+     *
+     * @param pageable   the pagination and sorting information
+     * @param newSearch  the search criteria containing location, number of bathrooms, bedrooms, guests, beds, and booking dates
+     * @return a paginated list of listings (DisplayCardListingDTO) that match the search criteria and are available for the specified dates
+     */
+    @Transactional(readOnly = true)
+    public Page<DisplayCardListingDTO> search(Pageable pageable, SearchDTO newSearch) {
+
+        // Retrieve listings that match the specified location and property details
+        Page<Listing> allMatchedListings = listingRepository.findAllByLocationAndBathroomsAndBedroomsAndGuestsAndBeds(
+                pageable,
+                newSearch.location(),
+                newSearch.infos().baths().value(),
+                newSearch.infos().bedrooms().value(),
+                newSearch.infos().guests().value(),
+                newSearch.infos().beds().value()
+        );
+
+        // Extract public IDs from the listings that matched the initial search criteria
+        List<UUID> listingUUIDs = allMatchedListings.stream()
+                .map(Listing::getPublicId)
+                .toList();
+
+        // Get the IDs of listings that are already booked within the specified date range
+        List<UUID> bookingUUIDs = bookingService.getBookingMatchByListingIdsAndBookedDate(
+                listingUUIDs,
+                newSearch.dates()
+        );
+
+        // Filter out booked listings, transform the remaining available listings to DTOs for display
+        List<DisplayCardListingDTO> listingsNotBooked = allMatchedListings.stream()
+                .filter(listing -> !bookingUUIDs.contains(listing.getPublicId()))
+                .map(listingMapper::listingToDisplayCardListingDTO)
+                .toList();
+
+        // Return the filtered list as a paginated result
+        return new PageImpl<>(listingsNotBooked, pageable, listingsNotBooked.size());
+    }
 
 
 

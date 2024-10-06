@@ -17,4 +17,10 @@
   </div>
 }
 
-
+@if (!loading && emptySearch) {
+  <div class="flex flex-column align-items-center justify-content-center h-10rem">
+    <h1>No match for your search !</h1>
+    <div class="text-xl">Try with different parameters</div>
+    <button class="p-button mt-3" (click)="onResetSearchFilter()">Reset all the filters</button>
+  </div>
+}

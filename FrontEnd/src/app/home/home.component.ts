@@ -7,8 +7,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Pagination} from "../core/model/request.model";
 import {CardListing} from "../landlord/model/listing.model";
 import {TenantListingService} from "../tenant/tenant-listing.service";
-import {Subscription} from "rxjs";
+import {filter, Subscription} from "rxjs";
 import {Category} from "../layout/navbar/category/category.model";
+import {Search} from "../tenant/search/search.model";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-home',
@@ -51,16 +53,21 @@ export class HomeComponent implements OnInit, OnDestroy  {
     if (this.categoryServiceSubscription) {
       this.categoryServiceSubscription.unsubscribe();
     }
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
 
   }
 
   ngOnInit(): void {
+    this.startNewSearch();
     this.listenToChangeCategory();
   }
 
 
   constructor() {
     this.listenToGetAllCategory();
+    this.listenToSearch();
   }
 
 
@@ -100,5 +107,72 @@ export class HomeComponent implements OnInit, OnDestroy  {
     });
   }
 
+  /**
+   * Subscribes to search results from the tenant listing service and updates the component state
+   * based on the status of the search. It handles both successful searches and errors,
+   * showing appropriate feedback to the user.
+   */
+  private listenToSearch() {
+    this.searchSubscription = this.tenantListingService.search.subscribe({
+      next: searchState => {
+        if (searchState.status === "OK") {
+          this.loading = false;
+          this.searchIsLoading = false;
+          this.listings = searchState.value?.content;
+          this.emptySearch = this.listings?.length === 0;
+        } else if (searchState.status === "ERROR") {
+          this.loading = false;
+          this.searchIsLoading = false;
+          this.toastService.send({
+            severity: "error", summary: "Error when search listing",
+          })
+        }
+      }
+    })
+  }
+
+  /**
+   * Initiates a new search based on the query parameters from the URL.
+   * Extracts search criteria such as location, dates, and property details (guests, bedrooms, etc.),
+   * and then sends a request to search listings.
+   */
+  private startNewSearch(): void {
+    this.activatedRoute.queryParams.pipe(
+      filter(params => params['location']), // Proceed only if 'location' parameter is present
+    ).subscribe({
+      next: params => {
+        this.searchIsLoading = true;
+        this.loading = true;
+        // Build a new search object from query parameters
+        const newSearch: Search = {
+          dates: {
+            startDate: dayjs(params["startDate"]).toDate(),
+            endDate: dayjs(params["endDate"]).toDate(),
+          },
+          infos: {
+            guests: {value: params['guests']},
+            bedrooms: {value: params['bedrooms']},
+            beds: {value: params['beds']},
+            baths: {value: params['baths']},
+          },
+          location: params['location'],
+        };
+        // Trigger the search using the constructed search object
+        this.tenantListingService.searchListing(newSearch, this.pageRequest);
+      }
+    });
+  }
+
+  /**
+   * Resets the search filters by navigating to the default category and clearing search results.
+   * This method is used to refresh the search view and reset to initial state.
+   */
+  onResetSearchFilter(): void {
+    this.router.navigate(["/"], {
+      queryParams: {"category": this.categoryService.getCategoryByDefault().technicalName}
+    });
+    this.loading = true;
+    this.emptySearch = false; // Reset empty search indicator
+  }
 
 }

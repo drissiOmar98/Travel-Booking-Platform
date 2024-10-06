@@ -3,18 +3,17 @@ package com.omar.bookingappback.listing.controller;
 import com.omar.bookingappback.listing.BookingCategory;
 import com.omar.bookingappback.listing.dto.DisplayCardListingDTO;
 import com.omar.bookingappback.listing.dto.DisplayListingDTO;
+import com.omar.bookingappback.listing.dto.SearchDTO;
 import com.omar.bookingappback.listing.service.TenantService;
 import com.omar.bookingappback.shared.state.State;
 import com.omar.bookingappback.shared.state.StatusNotification;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -65,5 +64,26 @@ public class TenantController {
             ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, displayListingState.getError());
             return ResponseEntity.of(problemDetail).build();
         }
+    }
+
+
+
+    /**
+     * Handles search requests for listings based on various search criteria provided by the tenant.
+     * This endpoint allows clients to search for listings using filters like location, price, and more,
+     * and returns a paginated list of matching listings.
+     *
+     * @param pageable  The pagination information, such as page number, size, and sorting options.
+     *                  This parameter controls how the search results are paginated.
+     * @param searchDTO The search criteria provided by the client, encapsulated in a SearchDTO object.
+     *                  This object contains filters like location, price range, number of rooms, etc.
+     *
+     * @return A paginated response entity containing a page of DisplayCardListingDTO objects that match
+     *         the search criteria. Each DTO represents a listing card with relevant display information.
+     */
+    @PostMapping("/search")
+    public ResponseEntity<Page<DisplayCardListingDTO>> search(Pageable pageable,
+                                                              @Valid @RequestBody SearchDTO searchDTO) {
+        return ResponseEntity.ok(tenantService.search(pageable, searchDTO));
     }
 }

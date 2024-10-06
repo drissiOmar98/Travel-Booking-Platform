@@ -12,6 +12,7 @@ import {MenuItem} from "primeng/api";
 import {User} from "../../core/model/user.model";
 import dayjs from "dayjs";
 import {PropertiesCreateComponent} from "../../landlord/properties-create/properties-create.component";
+import {SearchComponent} from "../../tenant/search/search.component";
 
 @Component({
   selector: 'app-navbar',
@@ -124,6 +125,15 @@ export class NavbarComponent implements OnInit {
   }
 
   openNewSearch() {
+    this.ref = this.dialogService.open(SearchComponent,
+      {
+        width: "40%",
+        header: "Search",
+        closable: true,
+        focusOnShow: true,
+        modal: true,
+        showHeader: true
+      });
 
   }
 
